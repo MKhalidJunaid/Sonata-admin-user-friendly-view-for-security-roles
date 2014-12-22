@@ -1,0 +1,164 @@
+{% block sonata_security_roles_widget %}
+    {% spaceless %}
+        <div class="editable">
+            <div id="myTabContent" class="tab-content">
+                {% set counter=0 %}
+                <div class="tab-pane active" id="full_roles">
+                    <div class="clear"></div>
+                    <div class="panel-group" id="accordion_sonata_admin_global">
+                        {% for groups in hierarchicalRoles %}
+                            {% set counter=counter+1 %}
+                            {% if groups.modules is defined and groups.modules is not empty %}
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a class="collapse_ctrl" data-toggle="collapse" data-parent="#accordion_sonata_admin_global" href="#sonata_admin_global_collapseOne-{{ loop.index }}">
+                                                {{ groups.Grouplabel }}
+                                                <span class="caret"></span>
+                                            </a>
+
+                                            <div class="clear"></div>
+                                        </h4>
+                                    </div>
+                                    <div id="sonata_admin_global_collapseOne-{{ loop.index }}" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <table class="roles_table table table-bordered table-striped">
+                                                <tr>
+                                                    <th class="sonata-ba-list-field-header-text"> Modules</th>
+                                                    <th class="sonata-ba-list-field-header-text"> Create</th>
+                                                    <th class="sonata-ba-list-field-header-text"> Edit</th>
+                                                    <th class="sonata-ba-list-field-header-text"> View</th>
+                                                    <th class="sonata-ba-list-field-header-text"> List</th>
+                                                    <th class="sonata-ba-list-field-header-text"> Export</th>
+                                                    <th class="sonata-ba-list-field-header-text"> Delete</th>
+                                                    <th class="sonata-ba-list-field-header-text"> Master</th>
+                                                    <th class="sonata-ba-list-field-header-text"> Assign All</th>
+                                                </tr>
+                                                <tr class="assingall">
+                                                    <td colspan="10">
+                                                        <input title="sonata_admin_global_collapseOne-{{ loop.index }}" type="checkbox" class="sonata_admin_permission_group"/>
+                                                        Assign Group Permission
+                                                    </td>
+                                                </tr>
+                                                {% for key,mod in groups.modules %}
+                                                    {% set counter=counter+1 %}
+                                                    <tr>
+                                                    {% if mod.permissions is defined and mod.permissions is not empty %}
+                                                        <td class="sonata-ba-list-field sonata-ba-list-field-text"><p>{{ mod.label }}</p></td>
+                                                        <td class="sonata-ba-list-field sonata-ba-list-field-text"><p class="siblings">
+                                                                {% if mod.permissions.CREATE is defined %}
+                                                                    <input name="{{ full_name }}[]" class="sonata_admin_global_module-{{ counter }}  module-publish-{{ counter }}"
+                                                                           type="checkbox" value="{{ mod.permissions.CREATE }}" {% if mod.permissions.CREATE in selected_choices %} checked {% endif %}/>
+                                                                {% endif %}</p></td>
+                                                        <td class="sonata-ba-list-field sonata-ba-list-field-text"><p class="siblings">
+                                                                {% if mod.permissions.EDIT is defined %}
+                                                                    <input name="{{ full_name }}[]" class="sonata_admin_global_module-{{ counter }}  module-publish-{{ counter }}" type="checkbox"
+                                                                           value="{{ mod.permissions.EDIT }}" {% if mod.permissions.EDIT in selected_choices %} checked {% endif %}/>
+                                                                {% endif %}</p>
+                                                        </td>
+                                                        <td class="sonata-ba-list-field sonata-ba-list-field-text"><p class="siblings">{% if mod.permissions.VIEW is defined %}
+                                                                    <input name="{{ full_name }}[]"   class="sonata_admin_global_module-{{ counter }}  module-publish-{{ counter }}  module-view" data-counter="{{ counter }}" type="checkbox" value="{{ mod.permissions.VIEW }}" {% if mod.permissions.VIEW in selected_choices %} checked {% endif %}/>{% endif %}
+                                                            </p></td>
+                                                        <td class="sonata-ba-list-field sonata-ba-list-field-text"><p class="siblings">{% if mod.permissions.LIST is defined %}
+                                                                    <input name="{{ full_name }}[]"   class="sonata_admin_global_module-{{ counter }} module-publish-{{ counter }}  module-view-{{ counter }}" type="checkbox" value="{{ mod.permissions.LIST }}" {% if mod.permissions.LIST in selected_choices %} checked {% endif %}/>{% endif %}
+                                                            </p></td>
+                                                        <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                                                            <p class="siblings">{% if mod.permissions.EXPORT is defined %}
+                                                                    <input    name="{{ full_name }}[]"   class="sonata_admin_global_module-{{ counter }}" type="checkbox" value="{{ mod.permissions.EXPORT }}"
+                                                                {% if mod.permissions.EXPORT in selected_choices %} checked {% endif %}/>{% endif %}
+                                                            </p></td>
+                                                      
+                                                        <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                                                            <p class="siblings">{% if mod.permissions.DELETE is defined %}
+                                                                    <input  name="{{ full_name }}[]"   type="checkbox" value="{{ mod.permissions.DELETE }}" {% if mod.permissions.DELETE in selected_choices %} checked {% endif %}/>{% endif %}
+                                                            </p></td>
+                                                        <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                                                            <p class="siblings">{% if mod.permissions.MASTER is defined %}
+                                                                    <input  name="{{ full_name }}[]"   type="checkbox" value="{{ mod.permissions.MASTER }}" {% if mod.permissions.MASTER in selected_choices %} checked {% endif %}/>{% endif %}
+                                                            </p></td>
+                                                        <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                                                            <input type="checkbox" class="assign_permissions_for_a_module" id="sonata_admin_global_module-{{ counter }}"/>
+                                                        </td>
+                                                        </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <script type="text/javascript">
+            jQuery(document).ready(function ($) {
+                $(".module-publish").each(function () {
+                    if ($(this).prop("checked")) {
+                        var counter = $(this).attr("data-counter");
+                        $('.module-publish-' + counter).prop("checked", true).addClass("readonly");
+                    }
+                });
+                $(".module-view").each(function () {
+                    if ($(this).prop("checked")) {
+                        var counter = $(this).attr("data-counter");
+                        $('.module-view-' + counter).prop("checked", true).addClass("readonly");
+                    }
+                });
+            });
+            jQuery(".module-view").on("click", function () {
+                var counter = jQuery(this).attr("data-counter");
+                if (jQuery(this).prop("checked")) {
+                    jQuery('.module-view-' + counter).prop("checked", true).addClass("readonly");
+                } else if (false == $(this).hasClass('readonly')) {
+                    jQuery('.module-view-' + counter).prop("checked", false).removeClass("readonly");
+                }
+            });
+            jQuery(".module-publish").on("click", function () {
+                var counter = jQuery(this).attr("data-counter");
+                if (jQuery(this).prop("checked")) {
+                    jQuery('.module-publish-' + counter).prop("checked", true).addClass("readonly");
+                } else if (false == $(this).hasClass('readonly')) {
+                    jQuery('.module-publish-' + counter).prop("checked", false).removeClass("readonly");
+                }
+            });
+            jQuery(".assign_permissions_for_a_module").on("click", function () {
+                var childClass = jQuery(this).attr('id');
+                if (jQuery(this).prop("checked")) {
+                    jQuery('.' + childClass).prop("checked", true);
+                    var counter = jQuery('.' + childClass + '.module-publish').attr("data-counter");
+                    jQuery('.module-publish-' + counter).prop("checked", true).addClass("readonly");
+                } else {
+                    jQuery('.' + childClass).prop("checked", false).removeClass("readonly");
+                }
+            });
+            jQuery(".sonata_admin_permission_group").on("click", function () {
+                var containerId = jQuery(this).attr('title');
+                console.log(containerId)
+                if (jQuery(this).prop("checked")) {
+                    jQuery('#' + containerId + ' input').prop("checked", true);
+                    jQuery('#' + containerId + ' [class*=module-publish-]').prop("checked", true).addClass("readonly");
+
+                } else {
+                    jQuery('#' + containerId + ' input').prop("checked", false).removeClass("readonly");
+                }
+            });
+            $('.panel-collapse').on('click', '.readonly', function () {
+                return false;
+            });
+        </script>
+        {% if read_only_choices|length > 0 %}
+            <div class="readonly">
+                <h4>{{ 'field.label_roles_readonly'|trans({}, "SonataUserBundle") }}</h4>
+                <ul>
+                    {% for choice in read_only_choices %}
+                        <li>{{ choice }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endspaceless %}
+{% endblock sonata_security_roles_widget %}
