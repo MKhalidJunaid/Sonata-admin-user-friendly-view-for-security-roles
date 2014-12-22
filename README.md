@@ -49,4 +49,4 @@ Module Permissions Preview
 
 Create User Preview
 
-![Alt text](http://desiredinn.com/quiz/Create_user.png "Create User")
+![Alt text](http://desiredinn.com/quiz/Create_User.png "Create User")
