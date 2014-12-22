@@ -38,3 +38,15 @@ Last step import your service file in main configuration file that is `config.ym
             - { resource: parameters.yml }
             - { resource: security.yml }
             - { resource: @AcmeDemoBundle/Resources/config/admin.xml }
+
+Roles Group Preview
+
+![Alt text](http://desiredinn.com/quiz/Roles_Group.png "Roles Group")
+
+Module Permissions Preview
+
+![Alt text](http://desiredinn.com/quiz/Module_permissions.png "Module Permissions")
+
+Create User Preview
+
+![Alt text](http://desiredinn.com/quiz/Create_user.png "Create User")
