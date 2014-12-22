@@ -1,4 +1,4 @@
-Soanta Admin Ehanced View For Security Roles
+Soanta Admin Enhanced View For Security Roles
 --
 
 In Sonata admin if you wish to change display security roles as a user friendly view you have to override below sonata's services 
